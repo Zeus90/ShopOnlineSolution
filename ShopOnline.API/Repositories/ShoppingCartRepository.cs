@@ -51,7 +51,7 @@ namespace ShopOnline.API.Repositories
         {
                 this._context.CartItems.Remove(item);
                     await this._context.SaveChangesAsync();
-            }
+        }
             return item;
         }
 
@@ -83,13 +83,14 @@ namespace ShopOnline.API.Repositories
                               Qty = cartItem.Qty,
                               CartId = cartItem.CartId
                           }).SingleOrDefaultAsync();
+            //throw new NotImplementedException();
         }
 
         public async Task<CartItem> UpdateQty(int id, CartItemQtyUpdateDto cartItemQtyUpdateDto)
         {
             var item = await this._context.CartItems.FindAsync(id);
             if (item != null)
-            {
+        {
                 item.Qty = cartItemQtyUpdateDto.Qty;
                 await this._context.SaveChangesAsync();
 

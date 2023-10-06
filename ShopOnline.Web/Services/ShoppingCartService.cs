@@ -126,7 +126,7 @@ namespace ShopOnline.Web.Services
                 return null;
             }
             catch (Exception)
-            {
+        {
                 //log exception
                 throw;
             }

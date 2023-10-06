@@ -23,6 +23,7 @@ namespace ShopOnline.API.Controllers
             {
                 //two different queries to db is not ideal//use include!!
                 var products = await productRepository.GetItems();
+                var categories = await productRepository.GetCategories();
 
                 if (products == null)
                 {
@@ -54,6 +55,7 @@ namespace ShopOnline.API.Controllers
                 }
                 else
                 {
+                    var category = await productRepository.GetCategory(product.CategoryId);
 
                     var productDto = product.ConvertToDto();
 
@@ -107,6 +109,7 @@ namespace ShopOnline.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                                     "Error retrieving data from database");
             }
+            return Ok();
         }
     }
 }
