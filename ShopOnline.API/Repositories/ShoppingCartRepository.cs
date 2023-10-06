@@ -48,7 +48,7 @@ namespace ShopOnline.API.Repositories
             var item = await this._context.CartItems.FindAsync(id);
 
             if (item != null)
-            {
+        {
                 this._context.CartItems.Remove(item);
                     await this._context.SaveChangesAsync();
             }

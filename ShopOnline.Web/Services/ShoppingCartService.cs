@@ -56,7 +56,7 @@ namespace ShopOnline.Web.Services
                 return default(CartItemDto);
             }
             catch (Exception)
-            {
+        {
                 //log exception
                 throw;
             }
