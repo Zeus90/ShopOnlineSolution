@@ -1,0 +1,26 @@
+﻿@page "/"
+@inherits ProductsBase
+
+@if(Products == null)
+{
+    <DisplayLoading></DisplayLoading>
+}
+else
+{
+    <h3 class="mb-3">Products</h3>
+
+    var productCount = Products.Count();
+
+    @if (productCount > 0)
+    {
+        @foreach (var item in GetGroupedProductsByCategory())
+        {
+            <h4>@GetCategoryName(item)</h4>
+
+            <div class="row mt-3">
+               <DisplayProducts Products = "@item.Take(4)"></DisplayProducts>
+            </div>
+            <hr class="mb-3">
+        }
+    }
+}
