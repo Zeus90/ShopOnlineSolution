@@ -39,22 +39,22 @@ namespace ShopOnline.API.Extentions
             };
         }
 
-        public static IEnumerable<CartItemDto> ConvertToDto(this IEnumerable<CartItem> items, IEnumerable<Product> products)
+        public static IEnumerable<CartItemDto> ConvertToDto(this IEnumerable<CartItem> cartItems, IEnumerable<Product> products)
         {
-            return (from product in products
-                   join item in items
-                   on product.Id equals item.ProductId
+            return (from cartItem in cartItems
+                    join product in products
+                   on cartItem.ProductId equals product.Id
                    select new CartItemDto
                    {
-                       Id = item.Id,
-                       ProductId = product.Id,
-                       Qty = item.Qty,
-                       CartId = item.CartId,
+                       Id = cartItem.Id,
+                       ProductId = cartItem.ProductId,
+                       Qty = cartItem.Qty,
+                       CartId = cartItem.CartId,
                        ProductName = product.Name,
                        ProductDescription = product.Description,
                        Price= product.Price,
                        ProductImageURL = product.ImageURL,
-                       TotalPrice = product.Price * item.Qty
+                       TotalPrice = product.Price * cartItem.Qty
                    }).ToList();
         }
 
@@ -63,7 +63,7 @@ namespace ShopOnline.API.Extentions
             return new CartItemDto
             {
                 Id = cartItem.Id,
-                ProductId = product.Id,
+                ProductId = cartItem.ProductId,
                 CartId = cartItem.CartId,
                 Qty = cartItem.Qty,
                 ProductName = product.Name,

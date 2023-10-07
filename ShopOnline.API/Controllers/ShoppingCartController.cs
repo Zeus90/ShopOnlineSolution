@@ -81,7 +81,6 @@ namespace ShopOnline.API.Controllers
         }
 
         [HttpPost]
-
         public async Task<ActionResult<CartItemDto>> AddItem([FromBody] CartItemToAddDto cartItemToAdd)
         {
             try
@@ -102,12 +101,41 @@ namespace ShopOnline.API.Controllers
 
                 //the convention is to return the location of the newly post data =>
 
-                return CreatedAtAction(nameof(GetItem), new { id = newCartItem.Id }, newCartItemDto);
+                return CreatedAtAction(nameof(GetItem), new { id = newCartItemDto.Id }, newCartItemDto);
             }
             catch (Exception ex)
             {
 
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<CartItemDto>> DeleteItem(int id)
+        {
+            try
+            {
+                var item = await this.shoppingCartRepository.DeleteItem(id);
+
+                if (item == null)
+                {
+                    return NotFound("Item not found controller layer");
+                }
+
+                var product = await this.productRepository.GetItem(item.ProductId);
+                if (product == null)
+                {
+                    return NotFound("Product not found controller layer");
+                }
+
+                var itemDto = item.ConvertToDto(product);
+
+                return Ok(itemDto);
+            }
+            catch (Exception)
+            {
+                //log exception
+                throw;
             }
         }
     }
