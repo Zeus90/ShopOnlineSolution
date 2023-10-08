@@ -81,7 +81,6 @@ namespace ShopOnline.API.Controllers
         }
 
         [HttpPost]
-
         public async Task<ActionResult<CartItemDto>> AddItem([FromBody] CartItemToAddDto cartItemToAdd)
         {
             try
@@ -133,10 +132,35 @@ namespace ShopOnline.API.Controllers
 
                 return Ok(itemDto);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //log exception
-                throw;
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult<CartItemQtyUpdateDto>> UpdateQty(int id, CartItemQtyUpdateDto cartItemQtyUpdateDto)
+        {
+            try
+            {
+                var cartItem = await this.shoppingCartRepository.UpdateQty(id, cartItemQtyUpdateDto);
+                if (cartItem == null)
+                {
+                    return NotFound();
+                }
+                var product = await productRepository.GetItem(cartItem.ProductId);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                var updatedCartItemDto = cartItem.ConvertToDto(product);
+
+                return Ok(cartItemQtyUpdateDto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }
