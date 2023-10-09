@@ -23,7 +23,7 @@ namespace ShopOnline.Web.Pages
             try
             {
                 ShopingCartItemsDto = await ShoppingCartService.GetAllItems(HardCoded.UserId);
-                CalculateCartSummery();
+                CartChanged();
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace ShopOnline.Web.Pages
 
             RemoveItem(item.Id);
 
-            CalculateCartSummery();
+            CartChanged();
         }
 
         protected async Task UpdateQty_Click(int cartItemId, int qty)
@@ -57,7 +57,7 @@ namespace ShopOnline.Web.Pages
 
                     UpdateItemTotalPrice(returnedUpdatedItemQty);
 
-                    CalculateCartSummery();
+                    CartChanged();
 
                     await MakeUpdateBtnStyle(cartItemId, false);
                 }
@@ -83,6 +83,7 @@ namespace ShopOnline.Web.Pages
             await MakeUpdateBtnStyle(id, true);
         }
 
+
         private async Task MakeUpdateBtnStyle(int id, bool visible)
         {
             await Js.InvokeVoidAsync("UpdateQtyBtn", id, visible);
@@ -97,7 +98,7 @@ namespace ShopOnline.Web.Pages
                 item.TotalPrice = item.Price * item.Qty;
             }
         }
-
+        
         private void CalculateCartSummery()
         {
             SetTotalPice();
@@ -123,6 +124,12 @@ namespace ShopOnline.Web.Pages
         {
             var cartItemDto = GetItemDto(id);
             ShopingCartItemsDto.Remove(cartItemDto);
+        }
+
+        private void CartChanged()
+        {
+            CalculateCartSummery();
+            ShoppingCartService.RaiseEventOnShoppingCartChanged(TotalQuantity);
         }
     }
 }
