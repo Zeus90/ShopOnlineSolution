@@ -8,7 +8,9 @@ namespace ShopOnline.Web.Pages
     public class CheckoutBase : ComponentBase
     {
         [Inject]
-        public IJSRuntime Js { get; set; } 
+        public IJSRuntime Js { get; set; }
+        [Inject]
+        public IManageCartItemsLocalStorageService CartItemsLocalStorageService { get; set; }
         protected IEnumerable<CartItemDto> ShoppingCartItems { get; set; }
         protected string PaymentDescription { get; set; }
         protected decimal PaymentAmount { get; set; }
@@ -20,7 +22,7 @@ namespace ShopOnline.Web.Pages
         {
             try
             {
-                ShoppingCartItems = await ShoppingCartService.GetAllItems(HardCoded.UserId);
+                ShoppingCartItems = await CartItemsLocalStorageService.GetCollection();
 
                 if (ShoppingCartItems != null)
                 {
