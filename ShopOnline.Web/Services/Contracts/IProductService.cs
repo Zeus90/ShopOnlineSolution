@@ -6,5 +6,7 @@ namespace ShopOnline.Web.Services.Contracts
     {
         Task<IEnumerable<ProductDto>> GetItems();
         Task<ProductDto> GetProductById(int id);
+        Task<IEnumerable<ProductCategoryDto>> GetProductCategories();
+        Task <IEnumerable<ProductDto>> GetProductsByCategoryId(int categoryId);
     }
 }
